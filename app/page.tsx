@@ -1,65 +1,63 @@
 import Image from "next/image";
+import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
+import { topics } from "@/data/topics";
 
-export default function Home() {
+const topicIconMap: Record<string, string> = {
+  "grandchild-message": "/message.png",
+  "trip-2n3d-hot": "/travel.png",
+  "snack-recipe": "/snack.png",
+};
+
+export default function SelectThemePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <SiteHeader />
+
+      <main className="mx-auto max-w-[1280px] px-[40px] pt-[32px] pb-[60px]">
+        <div className="mx-auto max-w-[1080px]">
+          <h1 className="mb-[32px] text-[32px] font-bold leading-[1.3] tracking-[-0.05em] text-black">
+            대화를 나눌 주제를 선택하세요
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+          <div className="grid grid-cols-1 gap-[36px] lg:grid-cols-3">
+            {topics.map((theme) => {
+              const iconSrc = topicIconMap[theme.id];
+
+              return (
+                <Link
+                  key={theme.id}
+                  href={`/draft?topic=${theme.id}`}
+                  className="group block overflow-hidden border border-[#D9D9D9] bg-white transition-all duration-200 ease-out hover:-translate-y-[4px] hover:bg-[#FAFAFA] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
+                >
+                  <div className="flex h-[238px] items-center justify-center bg-[#EEF1EF]">
+                    {iconSrc && (
+                      <Image
+                        src={iconSrc}
+                        alt={theme.title}
+                        width={120}
+                        height={120}
+                        className="h-[120px] w-[120px] object-contain transition-transform duration-200 ease-out group-hover:scale-110"
+                        priority
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex min-h-[238px] flex-col px-[16px] pt-[18px] pb-[18px]">
+                    <h2 className="mb-[22px] whitespace-pre-line text-[29px] font-extrabold leading-[1.25] tracking-[-0.06em] text-black">
+                      {theme.cardTitle}
+                    </h2>
+
+                    <div className="mt-auto inline-flex h-[48px] w-fit items-center justify-center rounded-[8px] border border-[#3D73F2] px-[14px] text-[18px] font-semibold tracking-[-0.03em] text-[#3D73F2] transition-colors duration-200 group-hover:bg-[#3D73F2] group-hover:text-white">
+                      선택하기
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </main>
-    </div>
+    </>
   );
 }
