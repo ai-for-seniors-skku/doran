@@ -12,18 +12,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className="bg-white">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-[#f3f3f1] text-black">
-        {children}
-      </body>
+      <body className="min-h-screen bg-white text-black">{children}</body>
     </html>
   );
 }

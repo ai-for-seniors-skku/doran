@@ -32,9 +32,10 @@ export default function FlowPanelLayout({
           {title}
         </h1>
 
-        <section className="border border-[#d9d9d9] bg-white">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_432px] lg:h-[660px]">
-            <div className="flex min-w-0 flex-col border-r border-[#d9d9d9]">
+        <div className="grid lg:grid-cols-[minmax(0,1fr)_416px] lg:gap-[16px]">
+          {/* 왼쪽 패널 */}
+          <section className="border border-[#d9d9d9] bg-white">
+            <div className="flex min-w-0 flex-col lg:h-[660px]">
               <div className="flex h-[290px] flex-col">
                 <PanelHeader>AI에게 전할 말</PanelHeader>
 
@@ -67,16 +68,19 @@ export default function FlowPanelLayout({
                 </div>
               </div>
             </div>
+          </section>
 
-            <div className="flex w-full flex-col">
+          {/* 오른쪽 패널 */}
+          <section className="border border-[#d9d9d9] bg-white">
+            <div className="flex w-full flex-col lg:h-[660px]">
               <PanelHeader>도움말</PanelHeader>
 
               <div className="h-[604px] overflow-y-auto p-[16px]">
                 {helpContent}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </main>
   );

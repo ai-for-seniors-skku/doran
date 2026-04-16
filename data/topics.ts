@@ -27,7 +27,7 @@ export type Topic = {
   };
   stage2: {
     helpText: string;
-    defaultSelectedId: string;
+    defaultSelectedId: string | null;
     options: Stage2Option[];
   };
 };
@@ -49,7 +49,7 @@ export const topics: Topic[] = [
       helpText:
         "아래의 버튼을 눌러서 AI에게 전할 말을 좀 더 자세히 만들어볼까요?\n하고 싶으신 말을 여러 개 선택하신 후,\n‘AI에게 전할 말’을 확인해보세요.",
       selectionSuffix: "라는 말을 추가해줘.",
-      defaultSelectedIds: ["miss-you"],
+      defaultSelectedIds: [],
       options: [
         { id: "birthday", label: "생일을 축하해" },
         { id: "miss-you", label: "보고 싶어" },
@@ -60,7 +60,7 @@ export const topics: Topic[] = [
     stage2: {
       helpText:
         "AI와 나눈 대화는 모두 맥락이 저장됩니다.\n분위기를 바꾸거나 번역을 부탁해도 앞에서 고른 내용에 맞춰 답이 바뀌어요.\n이번에는 하나만 선택해볼까요?",
-      defaultSelectedId: "english",
+      defaultSelectedId: null,
       options: [
         {
           id: "funny",
@@ -115,7 +115,7 @@ export const topics: Topic[] = [
       helpText:
         "어떤 여행이 좋으신지 골라볼까요?\n여러 개를 함께 선택하면 더 잘 맞는 여행지를 추천받을 수 있어요.",
       selectionSuffix: "조건을 반영해서 추천해줘.",
-      defaultSelectedIds: ["famous-restaurants"],
+      defaultSelectedIds: [],
       options: [
         { id: "low-walking", label: "많이 걷지 않아도 돼" },
         { id: "famous-restaurants", label: "유명한 맛집이 많아" },
@@ -126,7 +126,7 @@ export const topics: Topic[] = [
     stage2: {
       helpText:
         "이제 추천 결과를 어떻게 정리할지 골라볼까요?\n하나를 선택하면 같은 여행지도 더 알맞은 방식으로 정리해드려요.",
-      defaultSelectedId: "itinerary",
+      defaultSelectedId: null,
       options: [
         {
           id: "car-free",
@@ -184,7 +184,7 @@ export const topics: Topic[] = [
       helpText:
         "어떤 간식이 좋으신지 골라볼까요?\n여러 개를 함께 선택하면 더 내 상황에 맞는 조리법을 알려드릴 수 있어요.",
       selectionSuffix: "조건을 반영해서 알려줘.",
-      defaultSelectedIds: ["egg-main"],
+      defaultSelectedIds: [],
       options: [
         { id: "egg-main", label: "달걀을 주 재료로" },
         { id: "no-fire", label: "불 없이 만들고 싶어" },
@@ -195,7 +195,7 @@ export const topics: Topic[] = [
     stage2: {
       helpText:
         "이제 설명 방식을 골라볼까요?\n단계를 자세히 볼 수도 있고,\n아이와 함께 만들기 쉽게 바꿀 수도 있어요.",
-      defaultSelectedId: "detail",
+      defaultSelectedId: null,
       options: [
         {
           id: "detail",
@@ -226,14 +226,12 @@ export function getTopicById(topicId?: string | null) {
   );
 }
 
-export function getStage2Item(topic: Topic, stage2Id?: string | null) {
-  return (
-    topic.stage2.options.find((item) => item.id === stage2Id) ??
-    topic.stage2.options.find(
-      (item) => item.id === topic.stage2.defaultSelectedId
-    ) ??
-    topic.stage2.options[0]
-  );
+export function findStage2Item(topic: Topic, stage2Id?: string | null) {
+  if (!stage2Id) {
+    return null;
+  }
+
+  return topic.stage2.options.find((item) => item.id === stage2Id) ?? null;
 }
 
 export function buildStage1Prompt(topic: Topic, selectedIds: string[]) {

@@ -10,7 +10,7 @@ import MarkdownAnswer from "@/components/MarkdownAnswer";
 import { stripMarkdown } from "@/lib/stripMarkdown";
 import {
   buildStage1Prompt,
-  getStage2Item,
+  findStage2Item,
   getTopicById,
 } from "@/data/topics";
 import { readFlowAnswers } from "@/lib/flowStorage";
@@ -39,17 +39,16 @@ export default function FinalClient({
       .map((item) => item.id);
   }, [stage1Ids, topic.stage1.options]);
 
-  const selectedStage2Item = getStage2Item(topic, stage2);
+  const selectedStage2Item = findStage2Item(topic, stage2);
 
   useEffect(() => {
     const saved = readFlowAnswers();
     setFinalAnswer(saved.finalAnswer || "");
   }, [topic.id]);
 
-  const finalPrompt = `${buildStage1Prompt(
-    topic,
-    orderedStage1Ids
-  )} 그리고 ${selectedStage2Item.promptText}`;
+  const finalPrompt = selectedStage2Item
+    ? `${buildStage1Prompt(topic, orderedStage1Ids)} 그리고 ${selectedStage2Item.promptText}`
+    : buildStage1Prompt(topic, orderedStage1Ids);
 
   const finalMessage =
     finalAnswer || "아직 생성된 답변이 없어요. 처음부터 다시 진행해 주세요.";

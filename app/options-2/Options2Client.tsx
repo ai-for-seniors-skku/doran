@@ -11,7 +11,7 @@ import SiteHeader from "@/components/SiteHeader";
 import MarkdownAnswer from "@/components/MarkdownAnswer";
 import {
   buildStage1Prompt,
-  getStage2Item,
+  findStage2Item,
   getTopicById,
 } from "@/data/topics";
 import { readFlowAnswers, writeFlowAnswers } from "@/lib/flowStorage";
@@ -62,12 +62,12 @@ export default function Options2Client({
       .map((item) => item.id);
   }, [stage1Ids, topic.stage1.options]);
 
-  const [selectedStage2Id, setSelectedStage2Id] = useState<string>(
-    stage2 ?? topic.stage2.defaultSelectedId
+  const [selectedStage2Id, setSelectedStage2Id] = useState<string | null>(
+    stage2 ?? topic.stage2.defaultSelectedId ?? null
   );
 
   useEffect(() => {
-    setSelectedStage2Id(stage2 ?? topic.stage2.defaultSelectedId);
+    setSelectedStage2Id(stage2 ?? topic.stage2.defaultSelectedId ?? null);
   }, [topic.id, stage2, topic.stage2.defaultSelectedId]);
 
   useEffect(() => {
@@ -75,9 +75,11 @@ export default function Options2Client({
     setStage1Answer(saved.stage1Answer || "");
   }, [topic.id]);
 
-  const selectedStage2Item = getStage2Item(topic, selectedStage2Id);
+  const selectedStage2Item = findStage2Item(topic, selectedStage2Id);
   const promptBase = buildStage1Prompt(topic, orderedStage1Ids);
-  const finalPrompt = `${promptBase} 그리고 ${selectedStage2Item.promptText}`;
+  const finalPrompt = selectedStage2Item
+    ? `${promptBase} 그리고 ${selectedStage2Item.promptText}`
+    : promptBase;
 
   const nextHref = (() => {
     const params = new URLSearchParams();
@@ -87,7 +89,9 @@ export default function Options2Client({
       params.set("stage1", orderedStage1Ids.join(","));
     }
 
-    params.set("stage2", selectedStage2Item.id);
+    if (selectedStage2Item) {
+      params.set("stage2", selectedStage2Item.id);
+    }
 
     return `/final?${params.toString()}`;
   })();
@@ -137,10 +141,15 @@ export default function Options2Client({
         title={topic.title}
         promptContent={
           <p className="font-maruburi text-[20px] leading-[1.7] tracking-[-0.05em] text-black">
-            {promptBase}{" "}
-            <span className="font-maruburi font-bold text-[#3D73F2]">
-              그리고 {selectedStage2Item.promptText}
-            </span>
+            {promptBase}
+            {selectedStage2Item && (
+              <>
+                {" "}
+                <span className="font-maruburi font-bold text-[#3D73F2]">
+                  그리고 {selectedStage2Item.promptText}
+                </span>
+              </>
+            )}
           </p>
         }
         promptAction={
@@ -183,7 +192,11 @@ export default function Options2Client({
                   <OptionPillButton
                     key={item.id}
                     selected={isSelected}
-                    onClick={() => setSelectedStage2Id(item.id)}
+                    onClick={() =>
+                      setSelectedStage2Id((prev) =>
+                        prev === item.id ? null : item.id
+                      )
+                    }
                     icon={
                       <Image
                         src={icon.src}
