@@ -7,11 +7,31 @@ type FlowPanelLayoutProps = {
   helpContent: ReactNode;
   promptAction?: ReactNode;
   footerActions?: ReactNode;
+  promptHeaderText?: string;
+  promptHeaderBgClassName?: string;
 };
 
-function PanelHeader({ children }: { children: ReactNode }) {
+function PanelHeader({
+  children,
+  bgClassName = "bg-[#EEF1EF]",
+  borderClassName = "border-[#d9d9d9]",
+}: {
+  children: ReactNode;
+  bgClassName?: string;
+  borderClassName?: string;
+}) {
   return (
-    <div className="flex h-[56px] items-center border-b border-[#d9d9d9] bg-[#EEF1EF] px-[20px] text-[24px] font-bold tracking-[-0.05em] text-black">
+    <div
+      className={`flex h-[56px] items-center border-b px-[20px] text-[24px] font-bold tracking-[-0.05em] text-black ${borderClassName} ${bgClassName}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function HelpPanelHeader({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex h-[56px] items-center border-b border-[#BFD4FF] bg-transparent px-[20px] text-[24px] font-bold tracking-[-0.05em] text-black">
       {children}
     </div>
   );
@@ -24,6 +44,8 @@ export default function FlowPanelLayout({
   helpContent,
   promptAction,
   footerActions,
+  promptHeaderText = "AI에게 전할 말",
+  promptHeaderBgClassName = "bg-[#EEF1EF]",
 }: FlowPanelLayoutProps) {
   return (
     <main className="mx-auto max-w-[1280px] px-[40px] pt-[32px] pb-[16px]">
@@ -37,7 +59,9 @@ export default function FlowPanelLayout({
           <section className="border border-[#d9d9d9] bg-white">
             <div className="flex min-w-0 flex-col lg:h-[660px]">
               <div className="flex h-[290px] flex-col">
-                <PanelHeader>AI에게 전할 말</PanelHeader>
+                <PanelHeader bgClassName={promptHeaderBgClassName}>
+                  {promptHeaderText}
+                </PanelHeader>
 
                 <div className="h-[146px] overflow-y-auto p-[16px]">
                   {promptContent}
@@ -70,10 +94,10 @@ export default function FlowPanelLayout({
             </div>
           </section>
 
-          {/* 오른쪽 패널 */}
-          <section className="border border-[#d9d9d9] bg-white">
+          {/* 오른쪽 도움말 패널 */}
+          <section className="overflow-hidden rounded-[16px] border-2 border-[#2F6FED] bg-[linear-gradient(180deg,#F0F6FF_0%,#FFFFFF_100%)]">
             <div className="flex w-full flex-col lg:h-[660px]">
-              <PanelHeader>도움말</PanelHeader>
+              <HelpPanelHeader>도움말</HelpPanelHeader>
 
               <div className="h-[604px] overflow-y-auto p-[16px]">
                 {helpContent}

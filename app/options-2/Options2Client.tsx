@@ -81,6 +81,8 @@ export default function Options2Client({
     ? `${promptBase} 그리고 ${selectedStage2Item.promptText}`
     : promptBase;
 
+  const canSubmit = !!selectedStage2Item;
+
   const nextHref = (() => {
     const params = new URLSearchParams();
     params.set("topic", topic.id);
@@ -97,7 +99,7 @@ export default function Options2Client({
   })();
 
   const handleSubmit = async () => {
-    if (isLoading) return;
+    if (isLoading || !canSubmit) return;
 
     try {
       setIsLoading(true);
@@ -155,6 +157,7 @@ export default function Options2Client({
         promptAction={
           <PrimaryActionButton
             onClick={handleSubmit}
+            disabled={!canSubmit || isLoading}
             icon={
               isLoading ? (
                 <LoadingDots />
@@ -162,7 +165,6 @@ export default function Options2Client({
                 <MaterialIcon name="send" className="text-[24px]" />
               )
             }
-            className={isLoading ? "pointer-events-none cursor-not-allowed" : ""}
           >
             {isLoading ? "불러오는 중" : "전달하기"}
           </PrimaryActionButton>

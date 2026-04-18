@@ -2,6 +2,12 @@ export type FlowAnswers = {
   draftAnswer?: string;
   stage1Answer?: string;
   finalAnswer?: string;
+  rewritePrompt?: string;
+  rewriteAnswer?: string;
+  geminiAnswer?: string;
+  claudeAnswer?: string;
+  agentType?: "chatgpt" | "gemini" | "claude";
+  agentAnswer?: string;
 };
 
 const STORAGE_KEY = "doran-flow-answers";

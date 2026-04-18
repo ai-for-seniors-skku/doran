@@ -9,10 +9,14 @@ type PrimaryActionButtonProps = {
   href?: string;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
 const baseClassName =
   "inline-flex h-[72px] w-[180px] items-center justify-center gap-[10px] rounded-[8px] bg-[#3D73F2] text-[24px] font-bold tracking-[-0.05em] text-white transition-colors duration-200 hover:bg-[#2F63DA]";
+
+const disabledClassName =
+  "pointer-events-none cursor-not-allowed bg-[#AFC4F8] text-white hover:bg-[#AFC4F8]";
 
 export default function PrimaryActionButton({
   children,
@@ -20,10 +24,26 @@ export default function PrimaryActionButton({
   href,
   onClick,
   className = "",
+  disabled = false,
 }: PrimaryActionButtonProps) {
-  const mergedClassName = `${baseClassName} ${className}`.trim();
+  const mergedClassName = [
+    baseClassName,
+    disabled ? disabledClassName : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (href) {
+    if (disabled) {
+      return (
+        <span className={mergedClassName} aria-disabled="true">
+          {icon}
+          <span>{children}</span>
+        </span>
+      );
+    }
+
     return (
       <Link href={href} className={mergedClassName}>
         {icon}
@@ -33,7 +53,12 @@ export default function PrimaryActionButton({
   }
 
   return (
-    <button type="button" onClick={onClick} className={mergedClassName}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={mergedClassName}
+      disabled={disabled}
+    >
       {icon}
       <span>{children}</span>
     </button>
