@@ -42,13 +42,38 @@ export default function CaptureClient() {
     };
   }, []);
 
-  const stopCamera = () => {
-    if (!streamRef.current) return;
+  useEffect(() => {
+    if (cameraState !== "ready") return;
+    void attachStreamToVideo();
+  }, [cameraState]);
 
-    streamRef.current.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
+  const attachStreamToVideo = async () => {
+    const video = videoRef.current;
+    const stream = streamRef.current;
+
+    if (!video || !stream) return;
+
+    try {
+      if (video.srcObject !== stream) {
+        video.srcObject = stream;
+      }
+
+      await video.play().catch(() => {
+        // metadata loaded 후 다시 재생 시도
+      });
+    } catch (error) {
+      console.error("attachStreamToVideo error:", error);
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
 
     if (videoRef.current) {
+      videoRef.current.pause();
       videoRef.current.srcObject = null;
     }
   };
@@ -61,26 +86,23 @@ export default function CaptureClient() {
 
     try {
       setCameraState("requesting");
-
       stopCamera();
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: "user",
           width: { ideal: 1280 },
-          height: { ideal: 720 },
+          height: { ideal: 960 },
         },
         audio: false,
       });
 
       streamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-
       setCameraState("ready");
+
+      requestAnimationFrame(() => {
+        void attachStreamToVideo();
+      });
     } catch (error) {
       const name =
         error && typeof error === "object" && "name" in error
@@ -97,6 +119,7 @@ export default function CaptureClient() {
         return;
       }
 
+      console.error("startCamera error:", error);
       setCameraState("error");
     }
   };
@@ -109,7 +132,7 @@ export default function CaptureClient() {
 
       const video = videoRef.current;
       const width = video.videoWidth || 720;
-      const height = video.videoHeight || 720;
+      const height = video.videoHeight || 960;
 
       const canvas = document.createElement("canvas");
       canvas.width = width;
@@ -188,6 +211,8 @@ export default function CaptureClient() {
       ? "사진을 준비하고 있어요."
       : "";
 
+  const showVideo = cameraState === "ready";
+
   return (
     <>
       <SiteHeader showHomeButton />
@@ -206,50 +231,39 @@ export default function CaptureClient() {
                 </div>
 
                 <div className="flex h-[604px] flex-col p-[16px]">
-                  <div className="flex min-h-0 flex-1 items-center justify-center rounded-[12px] border border-[#d9d9d9] bg-[#f8f8f8]">
-                    {cameraState === "ready" ? (
-                      <div className="w-full max-w-[328px]">
-                        <video
-                          ref={videoRef}
-                          autoPlay
-                          playsInline
-                          muted
-                          className="aspect-[3/4] w-full rounded-[12px] object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div className="px-[24px] text-center text-[20px] leading-[30px] tracking-[-0.05em] text-[#666]">
+                  <div className="relative flex min-h-0 flex-1 items-center justify-center rounded-[12px] border border-[#d9d9d9] bg-[#f8f8f8]">
+                    <div className="w-full max-w-[328px]">
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        onLoadedMetadata={() => {
+                          void attachStreamToVideo();
+                        }}
+                        className={`aspect-[3/4] w-full rounded-[12px] object-cover ${
+                          showVideo ? "block" : "hidden"
+                        }`}
+                      />
+                    </div>
+
+                    {!showVideo && (
+                      <div className="absolute inset-0 flex items-center justify-center px-[24px] text-center text-[20px] leading-[30px] tracking-[-0.05em] text-[#666]">
                         카메라를 켜거나 사진을 업로드해 주세요.
                       </div>
                     )}
                   </div>
 
                   <div className="mt-[16px] flex flex-wrap justify-end gap-[12px]">
-                    {cameraState !== "ready" ? (
+                    {!showVideo ? (
                       <>
-                        <SecondaryActionButton
-                          onClick={startCamera}
-                          icon={
-                            <MaterialIcon
-                              name="photo_camera"
-                              className="text-[24px]"
-                            />
-                          }
-                          className={
-                            cameraState === "requesting" || isProcessingImage
-                              ? "pointer-events-none opacity-70"
-                              : ""
-                          }
-                        >
-                          {cameraState === "requesting"
-                            ? "준비 중"
-                            : "카메라 켜기"}
-                        </SecondaryActionButton>
-
                         <SecondaryActionButton
                           onClick={handleOpenUpload}
                           icon={
-                            <MaterialIcon name="upload" className="text-[24px]" />
+                            <MaterialIcon
+                              name="upload"
+                              className="text-[24px]"
+                            />
                           }
                           className={
                             isProcessingImage
@@ -259,6 +273,21 @@ export default function CaptureClient() {
                         >
                           {isProcessingImage ? "처리 중" : "사진 업로드"}
                         </SecondaryActionButton>
+
+                        <PrimaryActionButton
+                          onClick={startCamera}
+                          disabled={
+                            cameraState === "requesting" || isProcessingImage
+                          }
+                          icon={
+                            <MaterialIcon
+                              name="photo_camera"
+                              className="text-[24px]"
+                            />
+                          }
+                        >
+                          {cameraState === "requesting" ? "준비 중" : "사진 찍기"}
+                        </PrimaryActionButton>
                       </>
                     ) : (
                       <>
@@ -268,7 +297,10 @@ export default function CaptureClient() {
                             setCameraState("idle");
                           }}
                           icon={
-                            <MaterialIcon name="close" className="text-[24px]" />
+                            <MaterialIcon
+                              name="close"
+                              className="text-[24px]"
+                            />
                           }
                           className={
                             isProcessingImage
