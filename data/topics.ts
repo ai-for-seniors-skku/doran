@@ -242,6 +242,31 @@ export const topics: Topic[] = [
       ],
     },
   },
+  {
+  id: "photo-style",
+  title: "사진을 원하는 스타일로 바꾸기",
+  cardTitle: "사진을 원하는\n스타일로 바꾸기",
+  draft: {
+    firstPrompt: "사진을 원하는 스타일로 바꾸고 싶어.",
+    aiInstruction: "",
+    helpText: "",
+    waitingText: "",
+  },
+  stage1: {
+    helpText: "",
+    selectionSuffix: "",
+    defaultSelectedIds: [],
+    options: [],
+  },
+  stage2: {
+    helpText: "",
+    defaultSelectedId: null,
+    options: [],
+  },
+  rewrite: {
+    helpParagraphs: [],
+  },
+ },
 ];
 
 const DEFAULT_TOPIC_ID = "grandchild-message";
