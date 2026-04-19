@@ -194,10 +194,24 @@ export default function SelectAgentClient({
         }
         helpContent={
           <div className="text-[20px] font-normal leading-[34px] tracking-[-0.05em] text-black">
-            <p>
-              어떤 서비스의 대답이 마음에 드시나요?
+            <p className="mb-[28px]">
+              AI는 여러 종류의 서비스가 있어요.
               <br />
-              결과를 비교해보고 마음에 드는 AI 서비스를 찾아보세요.
+              지금 보고 계신 건 &quot;챗지피티(ChatGPT)&quot;이고
+            </p>
+
+            <p className="mb-[28px]">
+              다른 회사들이 만든 ‘제미나이(Gemini)’나 ‘클로드(Claude)’라는 서비스도 있어요.
+              <br />
+              같은 프롬프트라도 다른 서비스에 전송하면,
+              <br />
+              다른 답변을 얻게 됩니다.
+            </p>
+
+            <p>
+              프롬프트 창 옆에 있는 &quot;챗지피티&quot; 버튼을 눌러
+              <br />
+              다른 서비스로 바꿔보실래요?
             </p>
           </div>
         }
