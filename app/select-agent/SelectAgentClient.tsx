@@ -64,6 +64,8 @@ export default function SelectAgentClient({
 
   const canSubmit = selectedAgent !== "chatgpt";
 
+  const shouldHighlightAgentSelector = selectedAgent === "chatgpt";
+
   const displayedAnswer =
     selectedAgent === "chatgpt"
       ? chatgptAnswer || "챗지피티 답변을 불러오지 못했어요."
@@ -139,20 +141,26 @@ export default function SelectAgentClient({
         }
         promptAction={
           <div className="flex items-center gap-[12px]">
-            <div className="relative">
+            <div
+              className={
+                shouldHighlightAgentSelector
+                  ? "agent-select-attention"
+                  : "relative overflow-hidden rounded-[8px] border border-[#C2C2C2] bg-white"
+              }
+            >
               <select
                 value={selectedAgent}
                 onChange={(event) =>
                   setSelectedAgent(event.target.value as AgentType)
                 }
-                className="h-[72px] w-[190px] appearance-none rounded-[8px] border border-[#C2C2C2] bg-white pl-[20px] pr-[52px] text-[24px] font-bold leading-none tracking-[-0.05em] text-black outline-none"
+                className="relative z-[1] h-[72px] w-[190px] appearance-none rounded-[8px] border-none bg-transparent pl-[20px] pr-[52px] text-[24px] font-bold leading-none tracking-[-0.05em] text-black outline-none"
               >
                 <option value="chatgpt">챗지피티</option>
                 <option value="gemini">제미나이</option>
                 <option value="claude">클로드</option>
               </select>
 
-              <span className="pointer-events-none absolute top-1/2 right-[16px] -translate-y-1/2">
+              <span className="pointer-events-none absolute top-1/2 right-[16px] z-[1] -translate-y-1/2">
                 <MaterialIcon
                   name="keyboard_arrow_down"
                   className="text-[30px]"

@@ -74,3 +74,60 @@ body {
   background: #ffffff;
   color: #000000;
 }
+
+@keyframes agentBorderPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(47, 111, 237, 0),
+      0 0 0 2px rgba(47, 111, 237, 0.95) inset,
+      0 0 0 rgba(47, 111, 237, 0);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(47, 111, 237, 0),
+      0 0 0 2px rgba(47, 111, 237, 1) inset,
+      0 0 18px rgba(47, 111, 237, 0.28);
+  }
+}
+
+@keyframes agentShineSweep {
+  0% {
+    transform: translateX(-140%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(240%) skewX(-18deg);
+  }
+}
+
+.agent-select-attention {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: white;
+}
+
+.agent-select-attention::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: agentBorderPulse 1.8s ease-in-out infinite;
+}
+
+.agent-select-attention::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: agentShineSweep 2.2s linear infinite;
+}
