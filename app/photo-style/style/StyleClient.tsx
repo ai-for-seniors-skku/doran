@@ -83,10 +83,12 @@ export default function StyleClient() {
   const handleGoToResult = () => {
     if (!selectedStyle) return;
 
-    writePhotoStyleFlow({
-      selectedStyleId: selectedStyle.id,
-      resultImageDataUrl: undefined,
-    });
+  writePhotoStyleFlow({
+    selectedStyleId: selectedStyle.id,
+    resultImageDataUrl: undefined,
+    refinePrompt: undefined,
+    refinedImageDataUrl: undefined,
+  });
 
     router.push("/photo-style/result");
   };
@@ -99,7 +101,7 @@ export default function StyleClient() {
         <main className="mx-auto max-w-[1280px] px-[40px] pt-[32px] pb-[16px]">
           <div className="mx-auto max-w-[1080px]">
             <h1 className="mb-[32px] text-[32px] font-bold leading-[1.3] tracking-[-0.05em] text-black">
-              사진 스타일 선택
+              사진을 원하는 스타일로 바꾸기
             </h1>
 
             <div className="rounded-[16px] border border-[#d9d9d9] bg-white p-[24px] text-[20px] leading-[32px] text-black">

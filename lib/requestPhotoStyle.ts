@@ -1,7 +1,14 @@
-export async function requestPhotoStyle(
-  sourceImageDataUrl: string,
-  styleId: string
-) {
+type RequestPhotoStyleParams = {
+  sourceImageDataUrl: string;
+  styleId?: string;
+  customPrompt?: string;
+};
+
+export async function requestPhotoStyle({
+  sourceImageDataUrl,
+  styleId,
+  customPrompt,
+}: RequestPhotoStyleParams) {
   const response = await fetch("/api/photo-style", {
     method: "POST",
     headers: {
@@ -10,6 +17,7 @@ export async function requestPhotoStyle(
     body: JSON.stringify({
       sourceImageDataUrl,
       styleId,
+      customPrompt,
     }),
   });
 

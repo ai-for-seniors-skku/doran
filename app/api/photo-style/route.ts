@@ -46,10 +46,8 @@ export async function POST(req: Request) {
     const sourceImageDataUrl =
       typeof body.sourceImageDataUrl === "string" ? body.sourceImageDataUrl : "";
     const styleId = typeof body.styleId === "string" ? body.styleId : "";
-
-    console.log("OPENAI_API_KEY exists:", !!process.env.OPENAI_API_KEY);
-    console.log("styleId:", styleId);
-    console.log("sourceImageDataUrl exists:", !!sourceImageDataUrl);
+    const customPrompt =
+      typeof body.customPrompt === "string" ? body.customPrompt.trim() : "";
 
     if (!sourceImageDataUrl) {
       return NextResponse.json(
@@ -58,9 +56,20 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!styleId || !STYLE_PROMPTS[styleId]) {
+    let prompt = "";
+
+    if (customPrompt) {
+      prompt = `Edit this photo according to the user's request: ${customPrompt}
+Preserve the same people, facial identity, pose, framing, and major clothing details as much as possible.
+Keep the result natural, family-friendly, and visually pleasing.
+Do not add unrelated people, text, or unnecessary objects.`;
+    } else if (styleId && STYLE_PROMPTS[styleId]) {
+      prompt = STYLE_PROMPTS[styleId];
+    }
+
+    if (!prompt) {
       return NextResponse.json(
-        { error: "선택한 스타일이 올바르지 않아요." },
+        { error: "스타일 또는 프롬프트가 필요해요." },
         { status: 400 }
       );
     }
@@ -71,12 +80,10 @@ export async function POST(req: Request) {
       type: mimeType,
     });
 
-    console.log("starting image edit request");
-
     const response = await client.images.edit({
       model: "gpt-image-1.5",
       image: imageFile,
-      prompt: STYLE_PROMPTS[styleId],
+      prompt,
       input_fidelity: "high",
       quality: "medium",
       size: "auto",

@@ -9,6 +9,7 @@ type FlowPanelLayoutProps = {
   footerActions?: ReactNode;
   promptHeaderText?: string;
   promptHeaderBgClassName?: string;
+  answerHeaderText?: string;
 };
 
 function PanelHeader({
@@ -46,6 +47,7 @@ export default function FlowPanelLayout({
   footerActions,
   promptHeaderText = "AI에게 전할 말",
   promptHeaderBgClassName = "bg-[#EEF1EF]",
+  answerHeaderText = "AI의 대답",
 }: FlowPanelLayoutProps) {
   return (
     <main className="mx-auto max-w-[1280px] px-[40px] pt-[32px] pb-[16px]">
@@ -55,7 +57,6 @@ export default function FlowPanelLayout({
         </h1>
 
         <div className="grid lg:grid-cols-[minmax(0,1fr)_416px] lg:gap-[16px]">
-          {/* 왼쪽 패널 */}
           <section className="border border-[#d9d9d9] bg-white">
             <div className="flex min-w-0 flex-col lg:h-[660px]">
               <div className="flex h-[290px] flex-col">
@@ -73,7 +74,7 @@ export default function FlowPanelLayout({
               </div>
 
               <div className="flex h-[370px] flex-col border-t border-[#d9d9d9]">
-                <PanelHeader>AI의 대답</PanelHeader>
+                <PanelHeader>{answerHeaderText}</PanelHeader>
 
                 <div className="h-[314px] p-[16px]">
                   {footerActions ? (
@@ -94,7 +95,6 @@ export default function FlowPanelLayout({
             </div>
           </section>
 
-          {/* 오른쪽 도움말 패널 */}
           <section className="overflow-hidden rounded-[16px] border-2 border-[#2F6FED] bg-[linear-gradient(180deg,#F0F6FF_0%,#FFFFFF_100%)]">
             <div className="flex w-full flex-col lg:h-[660px]">
               <HelpPanelHeader>도움말</HelpPanelHeader>

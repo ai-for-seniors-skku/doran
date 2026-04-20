@@ -3,6 +3,8 @@ export type PhotoStyleFlowState = {
   sourceMethod?: "camera" | "upload";
   selectedStyleId?: string;
   resultImageDataUrl?: string;
+  refinePrompt?: string;
+  refinedImageDataUrl?: string;
 };
 
 const STORAGE_KEY = "doran-photo-style-flow";
