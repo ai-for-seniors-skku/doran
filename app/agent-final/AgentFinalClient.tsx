@@ -200,10 +200,10 @@ export default function AgentFinalClient({
         footerActions={
           <>
             <SecondaryActionButton
-              href="/"
+              href="/hallucination"
               icon={<MaterialIcon name="home" className="text-[24px]" />}
             >
-              처음으로
+              다음으로
             </SecondaryActionButton>
 
             <PrimaryActionButton
