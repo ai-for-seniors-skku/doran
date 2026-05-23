@@ -25,9 +25,9 @@ const grandchildStage2IconMap: Record<string, { src: string; alt: string }> = {
 };
 
 const tripStage2IconMap: Record<string, { src: string; alt: string }> = {
-  "car-free": { src: "/icons/trip/nocar.png", alt: "차 없이 이동 아이콘" },
-  "rainy-day": { src: "/icons/trip/rain.png", alt: "비 아이콘" },
-  itinerary: { src: "/icons/trip/schedule.png", alt: "일정표 아이콘" },
+  family: { src: "/travel.png", alt: "가족 여행 아이콘" },
+  couple: { src: "/icons/grandchild/heart.png", alt: "커플 여행 아이콘" },
+  schedule: { src: "/icons/trip/schedule.png", alt: "일정표 아이콘" },
 };
 
 const snackStage2IconMap: Record<string, { src: string; alt: string }> = {

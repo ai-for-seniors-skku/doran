@@ -22,13 +22,13 @@ const grandchildStage1IconMap: Record<string, { src: string; alt: string }> = {
 };
 
 const tripStage1IconMap: Record<string, { src: string; alt: string }> = {
-  "low-walking": { src: "/icons/trip/walking.png", alt: "걷기 아이콘" },
-  "famous-restaurants": {
+  "drive-course": { src: "/icons/trip/car.png", alt: "드라이브 아이콘" },
+  "good-restaurants": {
     src: "/icons/trip/restaurant.png",
     alt: "맛집 아이콘",
   },
-  "nice-hotel": { src: "/icons/trip/hotel.png", alt: "숙소 아이콘" },
-  "ocean-view": { src: "/icons/trip/sea.png", alt: "바다 아이콘" },
+  "nature-view": { src: "/icons/trip/sea.png", alt: "자연 풍경 아이콘" },
+  "easy-course": { src: "/icons/trip/walking.png", alt: "편한 코스 아이콘" },
 };
 
 const snackStage1IconMap: Record<string, { src: string; alt: string }> = {

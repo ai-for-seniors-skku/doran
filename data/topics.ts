@@ -93,17 +93,16 @@ export const topics: Topic[] = [
   },
   {
     id: "trip-2n3d-hot",
-    title: "국내로 2박 3일 추천 여행지 찾기",
-    cardTitle: "국내로 2박3일!!\n추천 여행지 찾기",
+    title: "제주도로 2박 3일 추천 여행지 찾기",
+    cardTitle: "제주도로 2박3일!!\n추천 여행지 찾기",
     draft: {
-      firstPrompt: "국내로 2박 3일 여행을 가고 싶어. 여행지를 추천해줘.",
-      aiInstruction: `여러 후보를 보여주지 말고 국내 여행지 한 군데만 추천해줘.
-사용자가 고른 조건을 반영해서 왜 잘 맞는지 분명하게 설명해줘.
-여행지는 2박 3일 일정에 잘 맞아야 해.
+      firstPrompt: "제주도로 2박 3일 여행을 가고 싶어. 여행지를 추천해줘.",
+      aiInstruction: `제주 여행 경로를 하나만 추천해줘.
+여러 후보를 보여주지 말고 사용자의 조건에 맞는 2박 3일 제주 여행 일정을 하나만 제안해줘.
 답변은 읽기 쉬운 markdown 형식으로 작성해줘.
 코드블록은 사용하지 말고, 제목/소제목/목록 정도만 사용해줘.
-첫 줄은 **추천 여행지: 지역명** 형식으로 써줘.
-그 다음에는 짧은 소개 문단을 1개 써줘.
+첫 줄은 **추천 여행 경로: 지역 (또는 테마명)** 형식으로 써줘.
+그 다음에는 이 경로가 왜 좋은지 짧은 소개 문단을 1개 써줘.
 이후에는 반드시 아래 순서로 정리해줘.
 
 ### 추천 이유
@@ -115,7 +114,7 @@ export const topics: Topic[] = [
 - 3일차
 
 ### 참고할 점
-- 이동, 숙소, 날씨, 준비물 같은 실용 팁을 2~3개
+- 이동, 숙소, 날씨, 준비물, 맛집 예약, 렌터카 여부 같은 실용 팁을 2~3개
 
 문장은 너무 길지 않게 쓰고, 과장된 표현은 피하고, 바로 이해할 수 있게 정리해줘.`,
       helpText:
@@ -125,32 +124,32 @@ export const topics: Topic[] = [
     stage1: {
       helpText:
         "어떤 여행이 좋으신지 골라볼까요?\n여러 개를 함께 선택하면 더 잘 맞는 여행지를 추천받을 수 있어요.",
-      selectionSuffix: "조건을 반영해서 추천해줘.",
+      selectionSuffix: "조건을 반영해서 제주 여행 경로를 추천해줘.",
       defaultSelectedIds: [],
       options: [
-        { id: "low-walking", label: "많이 걷지 않아도 돼" },
-        { id: "famous-restaurants", label: "유명한 맛집이 많아" },
-        { id: "nice-hotel", label: "숙소가 편하고 좋아" },
-        { id: "ocean-view", label: "바다를 볼 수 있어" },
+        { id: "drive-course", label: "드라이브 코스가 좋겠어" },
+        { id: "good-restaurants", label: "맛집이 많았으면 좋겠어" },
+        { id: "nature-view", label: "자연 풍경을 많이 보고 싶어" },
+        { id: "easy-course", label: "편하게 다닐 수 있으면 좋겠어" },
       ],
     },
     stage2: {
       helpText:
-        "이제 추천 결과를 어떻게 정리할지 골라볼까요?\n하나를 선택하면 같은 여행지도 더 알맞은 방식으로 정리해드려요.",
+        "이제 어떻게 정리할지 골라볼까요?\n하나를 선택하면 더 알맞은 방식으로 정리해드려요.",
       defaultSelectedId: null,
       options: [
         {
-          id: "car-free",
-          label: "차 없이도 다녀오기 좋아",
-          promptText: "차 없이도 다녀오기 좋게 정리해 줘",
+          id: "family",
+          label: "4인 가족 기준",
+          promptText: "4인 가족을 전제로 정리해줘",
         },
         {
-          id: "rainy-day",
-          label: "비가 와도 괜찮아",
-          promptText: "비가 와도 괜찮게 정리해 줘",
+          id: "couple",
+          label: "커플 여행 기준",
+          promptText: "커플 여행을 전제로 정리해줘",
         },
         {
-          id: "itinerary",
+          id: "schedule",
           label: "일정표처럼 정리해줘",
           promptText: "일정표처럼 정리해 줘",
         },
